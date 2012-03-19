@@ -1,0 +1,36 @@
+#!C:\Program Files\ActiveState Perl Dev Kit 8.1\bin\perlapp-gui.exe
+PAP-Version: 1.0
+Packer: C:\Program Files\ActiveState Perl Dev Kit 8.1\bin\perlapp.exe
+Script: convert-to-strip.pl
+Cwd: C:\Users\sjlombardo\code\strip-convert
+Byref: 0
+Clean: 0
+Date: 2012-03-19 14:32:13
+Debug: 
+Dependent: 0
+Dyndll: 0
+Exe: convert-to-strip.exe-macosx-universal-32
+Force: 0
+Gui: 1
+Hostname: VWIN7DEV1
+Manifest: 
+No-Compress: 0
+No-Gui: 0
+No-Logo: 1
+Runlib: 
+Shared: none
+Singleton: 0
+Tmpdir: 
+Verbose: 0
+Version-Comments: 
+Version-CompanyName: Zetetic LLC
+Version-FileDescription: 
+Version-FileVersion: 1.0.0
+Version-InternalName: convert-to-strip
+Version-LegalCopyright: Copyright, 2012 all rights reserved
+Version-LegalTrademarks: 
+Version-OriginalFilename: convert-to-strip
+Version-ProductName: Convert To Strip
+Version-ProductVersion: 1.0.0
+Warnings: 0
+Xclude: 0
