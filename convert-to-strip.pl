@@ -79,7 +79,7 @@ sub splashIdToStrip {
 
   my $csv = Text::CSV->new({binary => 1});
   
-  unless(open($fh, "<", $opt_source)) {
+  unless(open($fh, "<:encoding(utf8)", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
@@ -127,7 +127,9 @@ sub splashIdToStrip {
 
   @fields = sort(@fields);
 
-  unless(open($fh, ">", $opt_target)) {
+  $csv = Text::CSV->new({binary => 1, eol=>"\n"});
+
+  unless(open($fh, ">:encoding(utf8)", $opt_target)) {
     Tkx::tk___messageBox(-message => "Can't open target file!\n", -type => "ok");
     return;
   }
