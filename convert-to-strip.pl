@@ -141,7 +141,7 @@ sub onePasswordToStrip {
     $idx++;
   }
   close($fh);
-  print_csv(@entries, @fields);
+  print_csv(\@entries, \@fields);
 }
 
 sub splashIdToStrip {
@@ -196,7 +196,7 @@ sub splashIdToStrip {
        }
   }
   close($fh);
-  print_csv(@entries, @fields);
+  print_csv(\@entries, \@fields);
 }
 
 sub contains {
@@ -207,22 +207,25 @@ sub contains {
 
 # print_csv(@entries, @fields);
 sub print_csv {
-  my(@entries, @fields) = @_;
+  my $entries_ref = $_[0];
+  my $fields_ref = $_[1];
+
+  my @entries_array = @$entries_ref;
+  my @fields_array = @$fields_ref;
   my $fh;
   my $csv = Text::CSV->new({binary => 1});
   
-  @fields = sort(@fields);
+  @fields_array = sort(@fields_array);
   unless(open($fh, ">", $opt_target)) {
     Tkx::tk___messageBox(-message => "Can't open target file!\n", -type => "ok");
     return;
   }
-  my @header = (("Category", "Entry"), @fields);
+  my @header = (("Category", "Entry"), @fields_array);
   $csv->print($fh, \@header);
-  foreach(@entries) {
+  foreach(@entries_array) {
     my $entry = $_;
-    print Dumper($entry);
     my @row = ($entry->{"category"}, $entry->{"name"});
-    foreach(@fields) {
+    foreach(@fields_array) {
       if(exists($entry->{"fields"}->{$_})) {
         push(@row,$entry->{"fields"}->{$_});
       } else {
