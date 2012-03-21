@@ -91,7 +91,7 @@ sub onePasswordToStrip {
   my @fields  = ();
   my $fh;
   
-  unless(open($fh, "<:encoding(utf8)", $opt_source)) {
+  unless(open($fh, "<", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
