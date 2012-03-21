@@ -23,7 +23,7 @@ use vars qw($opt_source $opt_target $file);
 my $IS_AQUA = Tkx::tk_windowingsystem() eq "aqua";
 
 my $mw = Tkx::widget->new(".");
-$mw->g_wm_title("SplashID to Strip Converter");
+$mw->g_wm_title("Convert to STRIP");
 
 my $frame = $mw->new_frame();
 $frame->g_pack(-anchor=>'center', -padx => 20, -pady => 20);
