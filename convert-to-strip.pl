@@ -12,6 +12,11 @@ use Text::CSV;
 use Text::CSV_PP;
 use JSON;
 use Data::Dumper;
+use Encode;
+
+use utf8;
+use warnings;
+use warnings    qw< FATAL  utf8     >;
 
 use vars qw($opt_source $opt_target $file);
 
@@ -100,7 +105,11 @@ sub onePasswordToStrip {
     # ***5642bee8-a5ff-11dc-8314-0800200c9a66***
     # We'll just check for the first three asterisks and skip if detected.
     if ($_ =~ /^\*\*\*.*$/) { next; }
-    my $row       = JSON->new->utf8->decode($_);
+    
+    # http://stackoverflow.com/questions/6905164/perl-uncaught-exception-malformed-utf-8-character-in-json-string
+    # decode wants a UTF-8 "binary" string, ie bytes
+    my $json_bytes = encode('UTF-8', $_);
+    my $row       = JSON->new->utf8->decode($json_bytes);
     # typeName: wallet.financial.CreditCard, split and take the last array element
     my @decimals  = split(/\./, $row->{'typeName'});
     my $entry     = {
