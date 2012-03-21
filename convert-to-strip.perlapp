@@ -5,11 +5,11 @@ Script: convert-to-strip.pl
 Cwd: C:\Users\sjlombardo\code\convert-to-strip
 Byref: 0
 Clean: 0
-Date: 2012-03-19 18:10:37
+Date: 2012-03-21 16:33:39
 Debug: 
 Dependent: 0
 Dyndll: 0
-Exe: convert-to-strip.exe
+Exe: convert-to-strip.app
 Force: 0
 Gui: 1
 Hostname: VWIN7DEV1
@@ -21,6 +21,7 @@ Runlib:
 Shared: none
 Singleton: 0
 Tmpdir: 
+Trim: JSON::PP58
 Verbose: 0
 Version-Comments: 
 Version-CompanyName: Zetetic LLC
