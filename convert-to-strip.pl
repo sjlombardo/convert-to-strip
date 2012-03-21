@@ -96,7 +96,7 @@ sub onePasswordToStrip {
   my @fields  = ();
   my $fh;
   
-  unless(open($fh, "<:encoding(utf8)", $opt_source)) {
+  unless(open($fh, "<", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
@@ -231,7 +231,7 @@ sub print_csv {
   my $csv = Text::CSV->new({binary => 1, eol=>"\n"});
   
   @fields = sort(@fields);
-  unless(open($fh, ">", $opt_target)) {
+  unless(open($fh, ">:encoding(utf8)", $opt_target)) {
     Tkx::tk___messageBox(-message => "Can't open target file!\n", -type => "ok");
     return;
   }
