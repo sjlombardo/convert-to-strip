@@ -91,7 +91,7 @@ sub onePasswordToStrip {
   my @fields  = ();
   my $fh;
   
-  unless(open($fh, "<", $opt_source)) {
+  unless(open($fh, "<:encoding(utf8)", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
@@ -152,7 +152,7 @@ sub splashIdToStrip {
   my $fh;
   my $csv = Text::CSV->new({binary => 1});
   
-  unless(open($fh, "<", $opt_source)) {
+  unless(open($fh, "<:encoding(utf8)", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
@@ -213,7 +213,7 @@ sub print_csv {
   my @entries_array = @$entries_ref;
   my @fields_array = @$fields_ref;
   my $fh;
-  my $csv = Text::CSV->new({binary => 1});
+  my $csv = Text::CSV->new({binary => 1, eol=>"\n"});
   
   @fields_array = sort(@fields_array);
   unless(open($fh, ">", $opt_target)) {
