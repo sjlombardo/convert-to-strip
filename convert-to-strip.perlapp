@@ -1,15 +1,15 @@
-#!C:\Program Files\ActiveState Perl Dev Kit 8.1\bin\perlapp-gui.exe
+#!C:\Program Files\ActiveState Perl Dev Kit 9.1.1\bin\perlapp-gui.exe
 PAP-Version: 1.0
-Packer: C:\Program Files\ActiveState Perl Dev Kit 8.1\bin\perlapp.exe
+Packer: C:\Program Files\ActiveState Perl Dev Kit 9.1.1\bin\perlapp.exe
 Script: convert-to-strip.pl
-Cwd: C:\Users\sjlombardo\code\strip-convert
+Cwd: C:\Users\sjlombardo\code\convert-to-strip
 Byref: 0
 Clean: 0
-Date: 2012-03-19 14:32:13
+Date: 2012-03-19 18:10:37
 Debug: 
 Dependent: 0
 Dyndll: 0
-Exe: convert-to-strip.exe-macosx-universal-32
+Exe: convert-to-strip.exe
 Force: 0
 Gui: 1
 Hostname: VWIN7DEV1

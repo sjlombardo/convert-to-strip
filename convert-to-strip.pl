@@ -147,7 +147,7 @@ sub onePasswordToStrip {
 sub splashIdToStrip {
   my $categories = {};
   my @entries = ();
-  my @fields = ();
+  my @fields = ("Note");
   my $idx = 0;
   my $fh;
   my $csv = Text::CSV->new({binary => 1});
@@ -157,6 +157,7 @@ sub splashIdToStrip {
     return;
   }
 
+  my $key; # save reference to category
   while(my $rowref = $csv->getline($fh)) {
 
        if($idx++ < 2) {next;};
@@ -165,7 +166,7 @@ sub splashIdToStrip {
        if($row[0] eq 'T') {
          # if the first column contains a T, it's a category definition, e.g.
          # T,21,Web Logins,Description,Username,Password,URL,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,4,
-         my $key = $row[1];
+         $key = $row[1];
          my @cfields = @row[4..11];
          $categories->{$key} = {
            "id"       => $row[1],
@@ -173,20 +174,25 @@ sub splashIdToStrip {
            "fields"   => \@cfields
          };
 
-         foreach(@row[4..11]) {
-           if(!contains($_, @fields)) {
+         foreach(@cfields) {
+           if(defined($_) && !contains($_, @fields)) {
              push(@fields, $_);
            } 
          } 
        }  else {
          ##  entry row
          my $ckey = $row[1];
+         unless(exists($categories->{$ckey})) { $ckey = $key; } # if category key is not found, use the last category imported
          my $efields = {};
          my $i = 0;
-         foreach(@row[3..10]) {
-           my $name = @{$categories->{$ckey}->{"fields"}}[$i++];
-           $efields->{$name} = $_;
+         my @cfields = @{$categories->{$ckey}->{"fields"}};
+         foreach(@row[3..@cfields]) {
+           my $name = $cfields[$i++];
+           if(defined && defined($name) && $name ne '') {
+             $efields->{$name} = $_;
+           }
          }
+         $efields->{"Note"} = $row[-1]; # last field in row is the note
          my $entry = { 
            "name" => $row[2],
            "category" => $categories->{$ckey}->{"name"},
@@ -210,26 +216,33 @@ sub print_csv {
   my $entries_ref = $_[0];
   my $fields_ref = $_[1];
 
-  my @entries_array = @$entries_ref;
-  my @fields_array = @$fields_ref;
+  my @entries = @$entries_ref;
+  my @fields = @$fields_ref;
   my $fh;
   my $csv = Text::CSV->new({binary => 1, eol=>"\n"});
   
-  @fields_array = sort(@fields_array);
+  @fields = sort(@fields);
   unless(open($fh, ">", $opt_target)) {
     Tkx::tk___messageBox(-message => "Can't open target file!\n", -type => "ok");
     return;
   }
-  my @header = (("Category", "Entry"), @fields_array);
+  
+  my @header = ("Category", "Entry");
+  foreach(@fields) {
+    if(defined && $_ ne '') { push(@header, $_) };
+  }
+
   $csv->print($fh, \@header);
-  foreach(@entries_array) {
+  foreach(@entries) {
     my $entry = $_;
     my @row = ($entry->{"category"}, $entry->{"name"});
-    foreach(@fields_array) {
-      if(exists($entry->{"fields"}->{$_})) {
-        push(@row,$entry->{"fields"}->{$_});
-      } else {
-        push(@row, "");
+    foreach(@fields) {
+      if(defined && $_ ne '') {
+        if(exists($entry->{"fields"}->{$_})) {
+          push(@row,$entry->{"fields"}->{$_});
+        } else {
+          push(@row, "");
+        }
       }
     } 
     $csv->print($fh, \@row);
