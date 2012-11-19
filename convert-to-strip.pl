@@ -104,7 +104,7 @@ sub onePasswordToStrip {
     # There are odd noise lines between each entry, each the same:
     # ***5642bee8-a5ff-11dc-8314-0800200c9a66***
     # We'll just check for the first three asterisks and skip if detected.
-    if ($_ =~ /^\*\*\*.*$/) { next; }
+    if ($_ =~ /^\*\*\*.*$/ or $_ =~ /^\s*$/ ) { next; }
     
     # http://stackoverflow.com/questions/6905164/perl-uncaught-exception-malformed-utf-8-character-in-json-string
     # decode wants a UTF-8 "binary" string, ie bytes
