@@ -248,7 +248,10 @@ sub print_csv {
     foreach(@fields) {
       if(defined && $_ ne '') {
         if(exists($entry->{"fields"}->{$_})) {
-          push(@row,$entry->{"fields"}->{$_});
+					my $output = $entry->{"fields"}->{$_};
+					$output =~ s/\|/\\|/;
+					# escape any pipe characters with \ for STRIP CSV formatting
+          push(@row,$output);
         } else {
           push(@row, "");
         }
