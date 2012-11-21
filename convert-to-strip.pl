@@ -112,8 +112,14 @@ sub onePasswordToStrip {
     my $row       = JSON->new->utf8->decode($json_bytes);
     # typeName: wallet.financial.CreditCard, split and take the last array element
     my @decimals  = split(/\./, $row->{'typeName'});
+
+		# figure out a name for the entry, in case it doesn't have one
+		my $entry_name = $row->{'title'};
+		if ($entry_name eq '' or $entry_name =~ /^\s*$/) {
+		  $entry_name = 'Untitled entry';	
+		}
     my $entry     = {
-      'name'      => $row->{'title'},
+      'name'      => $entry_name,
       'category'  => $decimals[-1],
       'fields'    => {}
     };
@@ -202,8 +208,13 @@ sub splashIdToStrip {
            }
          }
          $efields->{"Note"} = $row[-1]; # last field in row is the note
+				 # figure out a name for the entry, in case it doesn't have one
+				 my $entry_name = $row[2];
+				 if ($entry_name eq '' or $entry_name =~ /^\s*$/) {
+				   $entry_name = 'Untitled entry';	
+				 }
          my $entry = { 
-           "name" => $row[2],
+           "name" => $entry_name,
            "category" => $categories->{$ckey}->{"name"},
            "fields" => $efields
          };
