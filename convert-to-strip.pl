@@ -113,6 +113,12 @@ sub onePasswordToStrip {
     # typeName: wallet.financial.CreditCard, split and take the last array element
     my @decimals  = split(/\./, $row->{'typeName'});
 
+		# watch out for trash...
+		my $trashed = $row->{'trashed'};
+		if (defined($trashed) && $trashed == 1) {
+			next;
+		}
+
 		# figure out a name for the entry, in case it doesn't have one
 		my $entry_name = $row->{'title'};
 		if ($entry_name eq '' or $entry_name =~ /^\s*$/) {
