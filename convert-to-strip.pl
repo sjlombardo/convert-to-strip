@@ -95,16 +95,34 @@ sub onePasswordToStrip {
   my @entries = ();
   my @fields  = ();
   my $fh;
+	my $slurp_handle;
+	
+	unless(open($slurp_handle, "<", $opt_source)) {
+    Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
+    return;
+  }
+
+	# slurp it in once so we can scan for our record separator
+	$/ = "";
+	$_ = <$slurp_handle>;
+	close($slurp_handle);
+	# look for a pattern like this to get our record separator matches
+	$_ =~ /\*\*\*[a-z0-9-]+\*\*\*/;
+	# our record separator will be what was matched
+	$/ = $&;
   
   unless(open($fh, "<", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
+
   while(<$fh>) {
     # There are odd noise lines between each entry, each the same:
     # ***5642bee8-a5ff-11dc-8314-0800200c9a66***
     # We'll just check for the first three asterisks and skip if detected.
     if ($_ =~ /^\*\*\*.*$/ or $_ =~ /^\s*$/ ) { next; }
+
+		chomp;
     
     # http://stackoverflow.com/questions/6905164/perl-uncaught-exception-malformed-utf-8-character-in-json-string
     # decode wants a UTF-8 "binary" string, ie bytes
