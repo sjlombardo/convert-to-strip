@@ -9,3 +9,7 @@ Full introductions to this utility, along with screenshots describing how to exp
 ## Downloads
 
 Downloads are no longer hosted on GitHub, you can find updated links for the Windows and OS X versions at [getstrip.com/switch](http://getstrip.com/switch).
+
+## Support
+
+If you run into any problems with this utility, please contact us at [support@zetetic.net](mailto:support@zetetic.net).
