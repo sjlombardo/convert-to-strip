@@ -154,7 +154,7 @@ sub onePasswordToStrip {
       my $name = $_;
       my $value = $row->{'secureContents'}->{$name};
       # add the field to our list if it's not in there already (but ignore the 'fields' name, holding an inner set of fields)
-      if(!contains($name, @fields) && $name ne 'fields') {
+      if(!contains($name, @fields) && $name ne 'fields' && $name ne 'passwordHistory') {
          push(@fields, $name);
       }
       # add it to the entry if it's not blank
@@ -172,7 +172,10 @@ sub onePasswordToStrip {
           }
         }
         else {
-          $entry->{'fields'}->{$name} = $value;
+          # ignore passwordHistory array
+          if ($name ne 'passwordHistory') {
+            $entry->{'fields'}->{$name} = $value;
+          }
         }
       }   
     }
