@@ -97,7 +97,7 @@ sub onePasswordToStrip {
   my $fh;
 	my $slurp_handle;
 	
-	unless(open($slurp_handle, "<", $opt_source)) {
+	unless(open($slurp_handle, "<:encoding(utf8)", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
@@ -111,7 +111,7 @@ sub onePasswordToStrip {
 	# our record separator will be what was matched
 	$/ = $&;
   
-  unless(open($fh, "<", $opt_source)) {
+  unless(open($fh, "<:encoding(utf8)", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }

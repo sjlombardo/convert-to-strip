@@ -5,11 +5,11 @@ Script: convert-to-strip.pl
 Cwd: C:\Users\sjlombardo\code\convert-to-strip
 Byref: 0
 Clean: 0
-Date: 2012-03-21 16:33:39
+Date: 2012-11-21 15:40:55
 Debug: 
 Dependent: 0
 Dyndll: 0
-Exe: convert-to-strip.app
+Exe: convert-to-strip.exe
 Force: 0
 Gui: 1
 Hostname: VWIN7DEV1
@@ -26,12 +26,12 @@ Verbose: 0
 Version-Comments: 
 Version-CompanyName: Zetetic LLC
 Version-FileDescription: 
-Version-FileVersion: 1.0.0
+Version-FileVersion: 1.0.1
 Version-InternalName: convert-to-strip
 Version-LegalCopyright: Copyright, 2012 all rights reserved
 Version-LegalTrademarks: 
 Version-OriginalFilename: convert-to-strip
 Version-ProductName: Convert To Strip
-Version-ProductVersion: 1.0.0
+Version-ProductVersion: 1.0.1
 Warnings: 0
 Xclude: 0
