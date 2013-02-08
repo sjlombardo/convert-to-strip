@@ -194,7 +194,7 @@ sub splashIdToStrip {
   my $fh;
   my $csv = Text::CSV->new({binary => 1});
   
-  unless(open($fh, "<:encoding(utf8)", $opt_source)) {
+  unless(open($fh, "<", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
