@@ -13,6 +13,8 @@ use Text::CSV_PP;
 use JSON;
 use Data::Dumper;
 use Encode;
+use XML::Parser;
+use XML::SimpleObject;
 
 use utf8;
 use warnings;
@@ -44,12 +46,18 @@ my $format_label = $frame->new_ttk__label(-text => 'Source Format');
 $format_label->g_grid(-row => 3, -column => 0, -sticky => 'nw', -padx => 10, -pady => 5);
 
 my $source_format = 'splashidvid';
+
 my $radio_splashid = $frame->new_ttk__radiobutton(-text => "SplashID vID", -value => $source_format,
                                            -variable=> \$source_format);
 $radio_splashid->g_grid(-row => 3, -column => 1, -sticky => 'nw', -padx => 10, -pady => 5);
+
 my $radio_1password = $frame->new_ttk__radiobutton(-text => "1Password .1pif", -value => "1password",
                                              -variable=> \$source_format);
 $radio_1password->g_grid(-row => 3, -column => 2, -sticky => 'nw', -padx => 10, -pady => 5);
+
+my $radio_safewallet = $frame->new_ttk__radiobutton(-text => "SafeWallet XML", -value => "safewallet",
+                                           -variable=> \$source_format);
+$radio_safewallet->g_grid(-row => 3, -column => 3, -sticky => 'nw', -padx => 10, -pady => 5);
 
 my $export_button = $frame->new_ttk__button(-text => 'Run Conversion',  -command => \&export);
 $export_button->g_grid(-row => 4, -column => 1, -sticky => 'nw', -padx => 10, -pady => 5);
@@ -67,7 +75,7 @@ sub getTarget {
 sub validate {
   my $message = "";
   unless($opt_source) {
-    $message .= "Choose the directory to load Strip databases from\n"; 
+    $message .= "Choose the directory to load STRIP databases from\n"; 
   }
   unless($opt_target) {
     $message .= "Choose the file to save entries to\n"; 
@@ -83,12 +91,43 @@ sub export {
   if(validate()) {
     if ($source_format eq 'splashidvid') {
       splashIdToStrip();
-    } 
-    else {
+    } elsif ($source_format eq 'safewallet') {
+      safeWalletToSTRIP();
+    } else {
       onePasswordToStrip();
     }
     Tkx::tk___messageBox(-message => "Conversion complete!\n", -type => "ok");
   }
+}
+
+sub safeWalletToSTRIP {
+  my @entries = ();
+  my @fields = ();
+  my $parser = XML::Parser->new(ErrorContext => 2, Style => "Tree");
+  my $xmlobject = XML::SimpleObject->new( $parser->parsefile($opt_source) );
+  foreach my $folder ($xmlobject->child('SafeWallet')->child('Folder')) {
+    my $folder_name = $folder->attribute('Caption');
+    foreach my $card ($folder->child('Card')) {
+      my $card_name = $card->attribute('Caption');
+      # set up the entry
+      my $entry     = {
+        'name'      => $card_name,
+        'category'  => $folder_name,
+        'fields'    => {}
+      };
+      foreach my $property ($card->child('Property')) {
+        my $property_name = $property->attribute('Caption');
+        # Have we already seen this field for the header row listing?
+        if (!contains($property_name, @fields)) { push(@fields, $property_name); }
+        # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
+        if (defined($property->value) && $property->value ne '') {
+          $entry->{'fields'}->{$property_name} = $property->value;
+        }
+      }
+      push(@entries, $entry);
+    }
+  }
+  print_csv(\@entries, \@fields);
 }
 
 sub onePasswordToStrip {
