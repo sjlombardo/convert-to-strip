@@ -120,52 +120,60 @@ sub safeWalletToSTRIP {
   # now feed the data to XML::SimpleObject
   # my $xmlobject = XML::SimpleObject->new( $parser->parsefile($opt_source) );
   my $xmlobject = XML::SimpleObject->new( $parser->parse($xml) );
-  # SafeWallet V2
-  foreach my $folder ($xmlobject->child('SafeWallet')->child('Folder')) {
-    my $folder_name = $folder->attribute('Caption');
-    foreach my $card ($folder->child('Card')) {
-      my $card_name = $card->attribute('Caption');
-      # set up the entry
-      my $entry     = {
-        'name'      => $card_name,
-        'category'  => $folder_name,
-        'fields'    => {}
-      };
-      foreach my $property ($card->child('Property')) {
-        my $property_name = $property->attribute('Caption');
-        # Have we already seen this field for the header row listing?
-        if (!contains($property_name, @fields)) { push(@fields, $property_name); }
-        # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
-        if (defined($property->value) && $property->value ne '') {
-          $entry->{'fields'}->{$property_name} = $property->value;
+  # determine import format, version 2 or 3
+  # <SafeWallet> -> <T37 Caption="Vault"> -> <T3> [Folder] -> <T4> [Card]
+  my $v3root = $xmlobject->child('SafeWallet')->child('T37');
+  if (defined( $v3root )) {
+    # SafeWallet V3
+    foreach my $folder ($v3root->child('T3')) {
+      my $folder_name = $folder->attribute('Caption');
+      foreach my $card ($folder->child('T4')) {
+        my $card_name = $card->attribute('Caption');
+        # set up the entry
+        my $entry     = {
+          'name'      => $card_name,
+          'category'  => $folder_name,
+          'fields'    => {}
+        };
+        # the child property elements used to be called Property, now varying T* number types
+        foreach my $property ($card->children()) {
+          my $property_name = $property->attribute('Caption');
+          # Have we already seen this field for the header row listing?
+          if (!contains($property_name, @fields)) { push(@fields, $property_name); }
+          # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
+          if (defined($property->value) && $property->value ne '') {
+            $entry->{'fields'}->{$property_name} = $property->value;
+          }
         }
+        push(@entries, $entry);
       }
-      push(@entries, $entry);
+    }
+  } else {
+    # SafeWallet V2
+    foreach my $folder ($xmlobject->child('SafeWallet')->child('Folder')) {
+      my $folder_name = $folder->attribute('Caption');
+      foreach my $card ($folder->child('Card')) {
+        my $card_name = $card->attribute('Caption');
+        # set up the entry
+        my $entry     = {
+          'name'      => $card_name,
+          'category'  => $folder_name,
+          'fields'    => {}
+        };
+        foreach my $property ($card->child('Property')) {
+          my $property_name = $property->attribute('Caption');
+          # Have we already seen this field for the header row listing?
+          if (!contains($property_name, @fields)) { push(@fields, $property_name); }
+          # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
+          if (defined($property->value) && $property->value ne '') {
+            $entry->{'fields'}->{$property_name} = $property->value;
+          }
+        }
+        push(@entries, $entry);
+      }
     }
   }
-  # SafeWallet V3
-  # foreach my $vault ($xmlobject->child('SafeWallet')->child('T37')) {
-  #   my $folder_name = $vault->attribute('Caption');
-  #   foreach my $card ($vault->child('T4')) {
-  #     my $card_name = $card->attribute('Caption');
-  #     # set up the entry
-  #     my $entry     = {
-  #       'name'      => $card_name,
-  #       'category'  => $folder_name,
-  #       'fields'    => {}
-  #     };
-  #     foreach my $property ($card->children()) {
-  #       my $property_name = $property->attribute('Caption');
-  #       # Have we already seen this field for the header row listing?
-  #       if (!contains($property_name, @fields)) { push(@fields, $property_name); }
-  #       # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
-  #       if (defined($property->value) && $property->value ne '') {
-  #         $entry->{'fields'}->{$property_name} = $property->value;
-  #       }
-  #     }
-  #     push(@entries, $entry);
-  #   }
-  # }
+
   print_csv(\@entries, \@fields);
 }
 
