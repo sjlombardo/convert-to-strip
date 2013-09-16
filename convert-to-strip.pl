@@ -9,6 +9,7 @@ use POSIX qw(tmpnam);
 use Term::ReadKey;
 use Tkx;
 use Text::CSV;
+use Text::CSV_XS;
 use Text::CSV_PP;
 use JSON;
 use Data::Dumper;
@@ -103,8 +104,23 @@ sub export {
 sub safeWalletToSTRIP {
   my @entries = ();
   my @fields = ();
+  my $slurp_handle;
   my $parser = XML::Parser->new(ErrorContext => 2, Style => "Tree");
-  my $xmlobject = XML::SimpleObject->new( $parser->parsefile($opt_source) );
+  # smash known illegal control characters in the source
+  unless(open($slurp_handle, "<:encoding(UTF-16LE)", $opt_source)) {
+    Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
+    return;
+  }
+  $/ = "";
+	my $xml = <$slurp_handle>;
+	# vertical tab replaced with newline (valid)
+  $xml =~ s"\&#xB;"\&#xA;"gi;
+  close($slurp_handle);
+  
+  # now feed the data to XML::SimpleObject
+  # my $xmlobject = XML::SimpleObject->new( $parser->parsefile($opt_source) );
+  my $xmlobject = XML::SimpleObject->new( $parser->parse($xml) );
+  # SafeWallet V2
   foreach my $folder ($xmlobject->child('SafeWallet')->child('Folder')) {
     my $folder_name = $folder->attribute('Caption');
     foreach my $card ($folder->child('Card')) {
@@ -127,6 +143,29 @@ sub safeWalletToSTRIP {
       push(@entries, $entry);
     }
   }
+  # SafeWallet V3
+  # foreach my $vault ($xmlobject->child('SafeWallet')->child('T37')) {
+  #   my $folder_name = $vault->attribute('Caption');
+  #   foreach my $card ($vault->child('T4')) {
+  #     my $card_name = $card->attribute('Caption');
+  #     # set up the entry
+  #     my $entry     = {
+  #       'name'      => $card_name,
+  #       'category'  => $folder_name,
+  #       'fields'    => {}
+  #     };
+  #     foreach my $property ($card->children()) {
+  #       my $property_name = $property->attribute('Caption');
+  #       # Have we already seen this field for the header row listing?
+  #       if (!contains($property_name, @fields)) { push(@fields, $property_name); }
+  #       # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
+  #       if (defined($property->value) && $property->value ne '') {
+  #         $entry->{'fields'}->{$property_name} = $property->value;
+  #       }
+  #     }
+  #     push(@entries, $entry);
+  #   }
+  # }
   print_csv(\@entries, \@fields);
 }
 
