@@ -111,10 +111,17 @@ sub safeWalletToSTRIP {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
-  $/ = "";
-	my $xml = <$slurp_handle>;
-	# vertical tab replaced with newline (valid)
-  $xml =~ s"\&#xB;"\&#xA;"gi;
+  # loop thru line-by-line to zap blank lines and replace vertical-tab control characters with newline
+  my $xml = "";
+  while(<$slurp_handle>) {
+  	chomp;
+  	if ($_ eq '' or $_ =~ /^\s*$/) {
+  		next;
+  	} else {
+  		$_ =~ s"\&#xB;"\&#xA;"gi;
+  		$xml .= $_;
+  	}
+  }
   close($slurp_handle);
   
   # now feed the data to XML::SimpleObject
