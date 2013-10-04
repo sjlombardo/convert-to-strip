@@ -5,11 +5,11 @@ Script: convert-to-strip.pl
 Cwd: C:\Users\sjlombardo\code\convert-to-strip
 Byref: 0
 Clean: 0
-Date: 2012-11-21 15:40:55
+Date: 2013-06-12 20:54:45
 Debug: 
 Dependent: 0
 Dyndll: 0
-Exe: convert-to-strip.exe
+Exe: convert-to-strip.app
 Force: 0
 Gui: 1
 Hostname: VWIN7DEV1
