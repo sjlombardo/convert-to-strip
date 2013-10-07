@@ -14,8 +14,9 @@ use Text::CSV_PP;
 use JSON;
 use Data::Dumper;
 use Encode;
-use XML::Parser;
-use XML::SimpleObject;
+# use XML::Parser;
+# use XML::SimpleObject;
+use XML::LibXML;
 
 use utf8;
 use warnings;
@@ -105,36 +106,44 @@ sub safeWalletToSTRIP {
   my @entries = ();
   my @fields = ();
   my $slurp_handle;
-  my $parser = XML::Parser->new(ErrorContext => 2, Style => "Tree");
   unless(open($slurp_handle, "<:encoding(UTF-16LE)", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
   # loop thru line-by-line to zap blank lines and replace vertical-tab control characters with newline
-  my $xml = "";
-  while(<$slurp_handle>) {
-  	chomp;
-  	if ($_ eq '' or $_ =~ /^\s*$/) {
-  		next;
-  	} else {
-  		$_ =~ s"\&#xB;"\&#xA;"gi;
-  		$xml .= $_;
-  	}
-  }
-  close($slurp_handle);
+#   my $xml = "";
+#   while(<$slurp_handle>) {
+#   	chomp;
+#   	if ($_ eq '' or $_ =~ /^\s*$/) {
+#   		next;
+#   	} else {
+#   		$_ =~ s"\&#xB;"\&#xA;"gi;
+#   		$xml .= $_;
+#   	}
+#   }
+#   close($slurp_handle);
   
-  # now feed the data to XML::SimpleObject
-  # my $xmlobject = XML::SimpleObject->new( $parser->parsefile($opt_source) );
-  my $xmlobject = XML::SimpleObject->new( $parser->parse($xml) );
+# 	# now feed the data to XML::SimpleObject
+#   my $xmlobject = XML::SimpleObject->new( $parser->parse($xml) );
   # determine import format, version 2 or 3
   # <SafeWallet> -> <T37 Caption="Vault"> -> <T3> [Folder] -> <T4> [Card]
-  my $v3root = $xmlobject->child('SafeWallet')->child('T37');
-  if (defined( $v3root )) {
+  my $parser = XML::LibXML->new;
+	my $dom = $parser->load_xml(IO => $slurp_handle, recover => 2) or die;
+  my $isVersion3 = 0;
+  my $root = $dom->documentElement();
+  my @nodes = $root->getElementsByTagName('SafeWallet');
+  if (scalar(@nodes) > 0) {
+  	my @t37nodes = $nodes[0]->getElementsByTagName('T37');
+		if (scalar(@t37nodes) > 0) {
+			$isVersion3 = 1;
+		}
+  }
+  if ($isVersion3 == 1) {
     # SafeWallet V3
-    foreach my $folder ($v3root->child('T3')) {
-      my $folder_name = $folder->attribute('Caption');
-      foreach my $card ($folder->child('T4')) {
-        my $card_name = $card->attribute('Caption');
+    foreach my $folder ($root->getElementsByTagName('T3')) {
+      my $folder_name = $folder->getAttribute('Caption');
+      foreach my $card ($folder->getChildrenByTagName('T4')) {
+        my $card_name = $card->getAttribute('Caption');
         # set up the entry
         my $entry     = {
           'name'      => $card_name,
@@ -142,8 +151,8 @@ sub safeWalletToSTRIP {
           'fields'    => {}
         };
         # the child property elements used to be called Property, now varying T* number types
-        foreach my $property ($card->children()) {
-          my $property_name = $property->attribute('Caption');
+        foreach my $property ($card->getChildrenByTagName('*')) {
+          my $property_name = $property->getAttribute('Caption');
           # Have we already seen this field for the header row listing?
           if (!contains($property_name, @fields)) { push(@fields, $property_name); }
           # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
@@ -156,10 +165,10 @@ sub safeWalletToSTRIP {
     }
   } else {
     # SafeWallet V2
-    foreach my $folder ($xmlobject->child('SafeWallet')->child('Folder')) {
-      my $folder_name = $folder->attribute('Caption');
-      foreach my $card ($folder->child('Card')) {
-        my $card_name = $card->attribute('Caption');
+    foreach my $folder ($root->getChildrenByTagName('Folder')) {
+      my $folder_name = $folder->getAttribute('Caption');
+      foreach my $card ($folder->getChildrenByTagName('Card')) {
+        my $card_name = $card->getAttribute('Caption');
         # set up the entry
         my $entry     = {
           'name'      => $card_name,
@@ -167,7 +176,7 @@ sub safeWalletToSTRIP {
           'fields'    => {}
         };
         foreach my $property ($card->child('Property')) {
-          my $property_name = $property->attribute('Caption');
+          my $property_name = $property->getAttribute('Caption');
           # Have we already seen this field for the header row listing?
           if (!contains($property_name, @fields)) { push(@fields, $property_name); }
           # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
