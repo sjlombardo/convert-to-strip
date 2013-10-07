@@ -106,7 +106,6 @@ sub safeWalletToSTRIP {
   my @fields = ();
   my $slurp_handle;
   my $parser = XML::Parser->new(ErrorContext => 2, Style => "Tree");
-  # smash known illegal control characters in the source
   unless(open($slurp_handle, "<:encoding(UTF-16LE)", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
