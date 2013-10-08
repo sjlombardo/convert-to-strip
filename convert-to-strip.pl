@@ -106,7 +106,7 @@ sub safeWalletToSTRIP {
   my @entries = ();
   my @fields = ();
   my $slurp_handle;
-  unless(open($slurp_handle, "<:encoding(UTF-16LE)", $opt_source)) {
+  unless(open($slurp_handle, "<:raw:encoding(UTF-16)", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
@@ -122,6 +122,20 @@ sub safeWalletToSTRIP {
 #   	}
 #   }
 #   close($slurp_handle);
+
+## Didn't work:
+# 	## Attempt to convert UTF16-LE data to native UTF8 using Encode core module
+# 	$/ = "";
+# 	my $xml = <$slurp_handle>;
+# 	close($slurp_handle);
+# 	my $utf8string = decode("UTF-16LE", $xml);
+
+## Attempt to convert UTF16-LE data to native UTF8 thru... magicks
+## fascinating stuff here: http://www.perlmonks.org/?node_id=719216
+# 	$/ = "";
+# 	my $xml = <$slurp_handle>;
+# 	close($slurp_handle);
+# 	Encode::from_to($xml, 'UTF-16le', 'UTF-8');
   
 # 	# now feed the data to XML::SimpleObject
 #   my $xmlobject = XML::SimpleObject->new( $parser->parse($xml) );
