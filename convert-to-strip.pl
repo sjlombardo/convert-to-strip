@@ -106,15 +106,15 @@ sub safeWalletToSTRIP {
   my @entries = ();
   my @fields = ();
   my $slurp_handle;
-  unless(open($slurp_handle, "<:encoding(utf8)", $opt_source)) {
+  unless(open($slurp_handle, "<", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
-  binmode $slurp_handle;
+  # binmode $slurp_handle;
   # slurp data into a string and squash any vertical tab control char (html-encoded) with a newline control char
   $/ = "";
   my $xml = <$slurp_handle>;
-  $xml =~ s"\&#xB;"\&#xA;"gi;
+  # $xml =~ s"\&#xB;"\&#xA;"gi;
   my $doc = XML::LibXML->load_xml(string => $xml, recover => 2) or die;
   my $isVersion3 = 0;
   my $root = $doc->documentElement();
