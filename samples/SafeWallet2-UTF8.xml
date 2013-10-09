@@ -1,0 +1,61 @@
+<SafeWallet WalletName="Test wallet">
+  <Folder Caption="Business" Icon="180">
+    <Card Caption="Card with all available custom fields" Icon="190">
+      <Property Type="String" Caption="String field">This is a string field</Property>
+      <Property Type="Numeric" Caption="Numeric field">1234567890</Property>
+      <Property Type="Date" Caption="Date field">1/02/2013 00:00:00</Property>
+      <Property Type="Time" Caption="Time field">13/02/2013 00:00:00</Property>
+      <Property Type="Date and Time" Caption="Date and time field">1/02/2013 00:00:00</Property>
+      <Property Type="UPPER CASE" Caption="UPPER CASE field">THIS IS ALL IN UPPER CASE</Property>
+      <Property Type="Password" Caption="Password field">password</Property>
+      <Property Type="Web Address" Caption="Web Address field">http://exampleurl.com</Property>
+      <Property Type="Email" Caption="Email field">example@email.address.com</Property>
+      <Property Type="Phone Number" Caption="Phone Number field">1234567890</Property>
+      <Property Type="Note" Caption="Note field">This is a note&#xB;with a vertical tab</Property>
+    </Card>
+    <Card Caption="Driver's licence" Icon="225">
+      <Property Type="String" Caption="Number">1234567</Property>
+      <Property Type="String" Caption="Location">Chicago</Property>
+      <Property Type="Date" Caption="Issued On">1/02/2013 00:00:00</Property>
+      <Property Type="Date" Caption="Expires">12/04/2013 00:00:00</Property>
+      <Property Type="Note" Caption="Note" />
+      <Property Type="Phone Number" Caption="Custom field (Phone number)">123 123 4567</Property>
+    </Card>
+  </Folder>
+  <Folder Caption="Personal" Icon="180">
+    <Card Caption="Amazon" Icon="91">
+      <Property Type="Web Address" Caption="URL">http://amazon.com</Property>
+      <Property Type="String" Caption="Login">user</Property>
+      <Property Type="Password" Caption="Password">password</Property>
+      <Property Type="Note" Caption="Note">This is a note.</Property>
+    </Card>
+    <Card Caption="Citibank" Icon="5">
+      <Property Type="String" Caption="Account #">1234511111</Property>
+      <Property Type="String" Caption="Branch #">Chicago</Property>
+      <Property Type="String" Caption="Bank #">987111</Property>
+      <Property Type="String" Caption="Branch Name">Boston</Property>
+      <Property Type="String" Caption="Routing #">987</Property>
+      <Property Type="String" Caption="Contact Person 1" />
+      <Property Type="Phone Number" Caption="Phone 1" />
+      <Property Type="String" Caption="Contact Person 2" />
+      <Property Type="Phone Number" Caption="Phone 2" />
+      <Property Type="Note" Caption="Opening Hours" />
+      <Property Type="String" Caption="Type" />
+      <Property Type="Password" Caption="ATM PIN" />
+      <Property Type="String" Caption="SWIFT" />
+      <Property Type="Web Address" Caption="Web-Site" />
+      <Property Type="String" Caption="Username" />
+      <Property Type="Password" Caption="Password" />
+      <Property Type="Note" Caption="Note" />
+      <Property Type="Email" Caption="Custom field (Email)">admin@citibank.com</Property>
+    </Card>
+    <Card Caption="Custom web site with custom fields" Icon="91">
+      <Property Type="Web Address" Caption="URL">http://abc.com</Property>
+      <Property Type="String" Caption="Login">user1</Property>
+      <Property Type="Password" Caption="Password">password1</Property>
+      <Property Type="Note" Caption="Note">Main login is user1, if not use user2.</Property>
+      <Property Type="String" Caption="Custom field (alternative login)">user2</Property>
+      <Property Type="Password" Caption="Custom field (alternative password)">password2</Property>
+    </Card>
+  </Folder>
+</SafeWallet>

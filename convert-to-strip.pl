@@ -106,7 +106,7 @@ sub safeWalletToSTRIP {
   my @entries = ();
   my @fields = ();
   my $slurp_handle;
-  unless(open($slurp_handle, "<:raw:encoding(UTF-16)", $opt_source)) {
+  unless(open($slurp_handle, "<:encoding(utf8)", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
@@ -141,65 +141,46 @@ sub safeWalletToSTRIP {
 #   my $xmlobject = XML::SimpleObject->new( $parser->parse($xml) );
   # determine import format, version 2 or 3
   # <SafeWallet> -> <T37 Caption="Vault"> -> <T3> [Folder] -> <T4> [Card]
-  my $parser = XML::LibXML->new;
-	my $dom = $parser->load_xml(IO => $slurp_handle, recover => 2) or die;
+  # my $parser = XML::Parser->new(ErrorContext => 2, Style => "Tree");
+  # my $dom = XML::SimpleObject->new( $parser->parsefile($opt_source) );
+  # my $isVersion3 = 0;
+  # my $v3root = $dom->child('SafeWallet')->child('T37');
+  # if (defined($v3root)) {
+  #   $isVersion3 = 1;
+  # }  
+  binmode $slurp_handle;
+  my $doc = XML::LibXML->load_xml(IO => $slurp_handle, recover => 2) or die;
   my $isVersion3 = 0;
-  my $root = $dom->documentElement();
-  my @nodes = $root->getElementsByTagName('SafeWallet');
+  my $root = $doc->documentElement();
+  my @nodes = $root->getElementsByTagName('T37');
+  my $folder_tag_name = 'Folder';
+  my $record_tag_name = 'Card';
+  # if T37 tag is present, we are working with SafeWallet v3 export, update names used for key elements...
   if (scalar(@nodes) > 0) {
-  	my @t37nodes = $nodes[0]->getElementsByTagName('T37');
-		if (scalar(@t37nodes) > 0) {
-			$isVersion3 = 1;
-		}
+    $folder_tag_name = 'T3';
+    $record_tag_name = 'T4';
   }
-  if ($isVersion3 == 1) {
-    # SafeWallet V3
-    foreach my $folder ($root->getElementsByTagName('T3')) {
-      my $folder_name = $folder->getAttribute('Caption');
-      foreach my $card ($folder->getChildrenByTagName('T4')) {
-        my $card_name = $card->getAttribute('Caption');
-        # set up the entry
-        my $entry     = {
-          'name'      => $card_name,
-          'category'  => $folder_name,
-          'fields'    => {}
-        };
-        # the child property elements used to be called Property, now varying T* number types
-        foreach my $property ($card->getChildrenByTagName('*')) {
-          my $property_name = $property->getAttribute('Caption');
-          # Have we already seen this field for the header row listing?
-          if (!contains($property_name, @fields)) { push(@fields, $property_name); }
-          # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
-          if (defined($property->value) && $property->value ne '') {
-            $entry->{'fields'}->{$property_name} = $property->value;
-          }
+  foreach my $folder ($root->getElementsByTagName( $folder_tag_name )) {
+    my $folder_name = $folder->getAttribute('Caption');
+    foreach my $card ($folder->getChildrenByTagName( $record_tag_name )) {
+      my $card_name = $card->getAttribute('Caption');
+      # set up the entry
+      my $entry     = {
+        'name'      => $card_name,
+        'category'  => $folder_name,
+        'fields'    => {}
+      };
+      # the child property elements used to be called Property, now varying T* number types
+      foreach my $property ($card->getChildrenByTagName('*')) {
+        my $property_name = $property->getAttribute('Caption');
+        # Have we already seen this field for the header row listing?
+        if (!contains($property_name, @fields)) { push(@fields, $property_name); }
+        # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
+        if (defined($property->textContent) && $property->textContent ne '') {
+          $entry->{'fields'}->{$property_name} = $property->textContent;
         }
-        push(@entries, $entry);
       }
-    }
-  } else {
-    # SafeWallet V2
-    foreach my $folder ($root->getChildrenByTagName('Folder')) {
-      my $folder_name = $folder->getAttribute('Caption');
-      foreach my $card ($folder->getChildrenByTagName('Card')) {
-        my $card_name = $card->getAttribute('Caption');
-        # set up the entry
-        my $entry     = {
-          'name'      => $card_name,
-          'category'  => $folder_name,
-          'fields'    => {}
-        };
-        foreach my $property ($card->child('Property')) {
-          my $property_name = $property->getAttribute('Caption');
-          # Have we already seen this field for the header row listing?
-          if (!contains($property_name, @fields)) { push(@fields, $property_name); }
-          # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
-          if (defined($property->value) && $property->value ne '') {
-            $entry->{'fields'}->{$property_name} = $property->value;
-          }
-        }
-        push(@entries, $entry);
-      }
+      push(@entries, $entry);
     }
   }
 
