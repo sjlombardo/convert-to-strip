@@ -110,46 +110,12 @@ sub safeWalletToSTRIP {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
     return;
   }
-  # loop thru line-by-line to zap blank lines and replace vertical-tab control characters with newline
-#   my $xml = "";
-#   while(<$slurp_handle>) {
-#   	chomp;
-#   	if ($_ eq '' or $_ =~ /^\s*$/) {
-#   		next;
-#   	} else {
-#   		$_ =~ s"\&#xB;"\&#xA;"gi;
-#   		$xml .= $_;
-#   	}
-#   }
-#   close($slurp_handle);
-
-## Didn't work:
-# 	## Attempt to convert UTF16-LE data to native UTF8 using Encode core module
-# 	$/ = "";
-# 	my $xml = <$slurp_handle>;
-# 	close($slurp_handle);
-# 	my $utf8string = decode("UTF-16LE", $xml);
-
-## Attempt to convert UTF16-LE data to native UTF8 thru... magicks
-## fascinating stuff here: http://www.perlmonks.org/?node_id=719216
-# 	$/ = "";
-# 	my $xml = <$slurp_handle>;
-# 	close($slurp_handle);
-# 	Encode::from_to($xml, 'UTF-16le', 'UTF-8');
-  
-# 	# now feed the data to XML::SimpleObject
-#   my $xmlobject = XML::SimpleObject->new( $parser->parse($xml) );
-  # determine import format, version 2 or 3
-  # <SafeWallet> -> <T37 Caption="Vault"> -> <T3> [Folder] -> <T4> [Card]
-  # my $parser = XML::Parser->new(ErrorContext => 2, Style => "Tree");
-  # my $dom = XML::SimpleObject->new( $parser->parsefile($opt_source) );
-  # my $isVersion3 = 0;
-  # my $v3root = $dom->child('SafeWallet')->child('T37');
-  # if (defined($v3root)) {
-  #   $isVersion3 = 1;
-  # }  
   binmode $slurp_handle;
-  my $doc = XML::LibXML->load_xml(IO => $slurp_handle, recover => 2) or die;
+  # slurp data into a string and squash any vertical tab control char (html-encoded) with a newline control char
+  $/ = "";
+  my $xml = <$slurp_handle>;
+  $xml =~ s"\&#xB;"\&#xA;"gi;
+  my $doc = XML::LibXML->load_xml(string => $xml, recover => 2) or die;
   my $isVersion3 = 0;
   my $root = $doc->documentElement();
   my @nodes = $root->getElementsByTagName('T37');
@@ -183,7 +149,7 @@ sub safeWalletToSTRIP {
       push(@entries, $entry);
     }
   }
-
+  close($slurp_handle);
   print_csv(\@entries, \@fields);
 }
 
