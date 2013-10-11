@@ -105,6 +105,7 @@ sub export {
 sub safeWalletToSTRIP {
   my @entries = ();
   my @fields = ();
+  my $field_names = {};
   my $slurp_handle;
   unless(open($slurp_handle, "<", $opt_source)) {
     Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
@@ -143,17 +144,21 @@ sub safeWalletToSTRIP {
       foreach my $property ($card->getChildrenByTagName('*')) {
         my $property_name = $property->getAttribute('Caption');
         # Have we already seen this field for the header row listing?
-        if (!contains($property_name, @fields)) { push(@fields, $property_name); }
+        my $field_key = lc($property_name);
+        if (!contains($field_key, @fields)) { 
+          push(@fields, $field_key);
+          $field_names->{$field_key} = $property_name;
+        }
         # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
         if (defined($property->textContent) && $property->textContent ne '') {
-          $entry->{'fields'}->{$property_name} = $property->textContent;
+          $entry->{'fields'}->{$field_key} = $property->textContent;
         }
       }
       push(@entries, $entry);
     }
   }
   close($slurp_handle);
-  print_csv(\@entries, \@fields);
+  print_csv(\@entries, \@fields, \$field_names);
 }
 
 sub onePasswordToStrip {
@@ -327,12 +332,15 @@ sub contains {
 sub print_csv {
   my $entries_ref = $_[0];
   my $fields_ref = $_[1];
+  my $names_ref = $_[2];
 
   my @entries = @$entries_ref;
   my @fields = @$fields_ref;
+  my $field_names = $$names_ref;
   my $fh;
   my $csv = Text::CSV->new({binary => 1, eol=>"\n"});
   
+  # FIXME: consider turning this off to preserve user ordering once we're done testing
   @fields = sort(@fields);
   unless(open($fh, ">:encoding(utf8)", $opt_target)) {
     Tkx::tk___messageBox(-message => "Can't open target file!\n", -type => "ok");
@@ -341,7 +349,13 @@ sub print_csv {
   
   my @header = ("Category", "Entry");
   foreach(@fields) {
-    if(defined && $_ ne '') { push(@header, $_) };
+    if(defined && $_ ne '') {
+      if (defined($field_names)) {
+        push(@header, $field_names->{$_});
+      } else {
+        push(@header, $_);
+      }
+    }
   }
 
   $csv->print($fh, \@header);
