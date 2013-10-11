@@ -336,7 +336,10 @@ sub print_csv {
 
   my @entries = @$entries_ref;
   my @fields = @$fields_ref;
-  my $field_names = $$names_ref;
+  my $field_names;
+  if (defined($names_ref)) {
+    $field_names = $$names_ref;
+  }
   my $fh;
   my $csv = Text::CSV->new({binary => 1, eol=>"\n"});
   
