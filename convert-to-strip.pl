@@ -114,7 +114,9 @@ sub safeWalletToSTRIP {
   # slurp data into a string and squash any vertical tab control char (html-encoded) with a newline control char
   $/ = "";
   my $xml = <$slurp_handle>;
+  # Transform thanks to @HiwayBK
   Encode::from_to($xml, 'UTF-16LE', 'utf8');
+  # Regex format thanks to @SKradel
   $xml =~ s"\&#xB;"\&#xA;"gi;
   my $doc = XML::LibXML->load_xml(string => $xml, recover => 2) or die;
   my $isVersion3 = 0;
