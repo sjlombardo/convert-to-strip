@@ -1,5 +1,6 @@
 set EXE=convert-to-strip.exe
 set APP=convert-to-strip.app
+set LNX=convert-to-strip-linux
 
 perlapp --trim JSON::PP58 --norunlib --gui --nologo --target windows-x86-32 --info "CompanyName=Zetetic LLC;FileVersion=1.0.1;InternalName=convert-to-strip;LegalCopyright=Copyright, 2013 all rights reserved;OriginalFilename=convert-to-strip;ProductName=Convert To Strip;ProductVersion=1.0.1" --exe %EXE% convert-to-strip.pl
 

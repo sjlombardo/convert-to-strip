@@ -186,36 +186,19 @@ sub safeWallet_entryForRecord {
     }
   }
   # this could be a web login (T22) record, look for those additional attributes on the node itself
-  my $url       = $card->getAttribute('URL');
-  my $username  = $card->getAttribute('Username');
-  my $password  = $card->getAttribute('Password');
-  if (defined($url) && $url ne '') {
-    # make sure there's a field name record in case we haven't already created one for URL
-    my $field_key = 'url';
-    if (!contains($field_key, @$fields)) {
-      push(@$fields, $field_key);
-      $$field_names->{$field_key} = 'URL';
+  my @attributes = ( 'URL', 'Username', 'Password' );
+  for my $attribute (@attributes) {
+    my $value = $card->getAttribute($attribute);
+    if (defined($value) && $value ne '') {
+      # make sure there's a field name record in case we haven't already created one for this key
+      my $field_key = lc($attribute);
+      if (!contains($field_key, @$fields)) {
+        push(@$fields, $field_key);
+        $$field_names->{$field_key} = $attribute;
+      }
+      $entry->{'fields'}->{$field_key} = $value;
     }
-    $entry->{'fields'}->{'URL'} = $url;
-  }
-  if (defined($username) && $username ne '') {
-    # make sure there's a field name record in case we haven't already created one for Username
-    my $field_key = 'username';
-    if (!contains($field_key, @$fields)) {
-      push(@$fields, $field_key);
-      $$field_names->{$field_key} = 'Username';
-    }
-    $entry->{'fields'}->{'Username'} = $username;
-  }
-  if (defined($password) && $password ne '') {
-    # make sure there's a field name record in case we haven't already created one for Username
-    my $field_key = 'password';
-    if (!contains($field_key, @$fields)) {
-      push(@$fields, $field_key);
-      $$field_names->{$field_key} = 'Password';
-    }
-    $entry->{'fields'}->{'Password'} = $password;
-  }
+  };
   return $entry;
 }
 
