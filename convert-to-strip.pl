@@ -133,32 +133,90 @@ sub safeWalletToSTRIP {
   foreach my $folder ($root->getElementsByTagName( $folder_tag_name )) {
     my $folder_name = $folder->getAttribute('Caption');
     foreach my $card ($folder->getChildrenByTagName( $record_tag_name )) {
-      my $card_name = $card->getAttribute('Caption');
-      # set up the entry
-      my $entry     = {
-        'name'      => $card_name,
-        'category'  => $folder_name,
-        'fields'    => {}
-      };
-      # the child property elements used to be called Property, now varying T* number types
-      foreach my $property ($card->getChildrenByTagName('*')) {
-        my $property_name = $property->getAttribute('Caption');
-        # Have we already seen this field for the header row listing?
-        my $field_key = lc($property_name);
-        if (!contains($field_key, @fields)) { 
-          push(@fields, $field_key);
-          $field_names->{$field_key} = $property_name;
-        }
-        # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
-        if (defined($property->textContent) && $property->textContent ne '') {
-          $entry->{'fields'}->{$field_key} = $property->textContent;
-        }
-      }
+      my $entry = safeWallet_entryForRecord(\$card, \@fields, \$field_names);
+      # need to set the category name
+      $entry->{'category'} = $folder_name;
+      push(@entries, $entry);
+    }
+    # next let's check for T22 web login records
+    foreach my $t22 ($folder->getChildrenByTagName('T22')) {
+      my $entry = safeWallet_entryForRecord(\$t22, \@fields, \$field_names);
+      # set the category name
+      $entry->{'category'} = $folder_name;
       push(@entries, $entry);
     }
   }
   close($slurp_handle);
   print_csv(\@entries, \@fields, \$field_names);
+}
+
+sub safeWallet_entryForRecord {
+  # my $card_ref  = $_[0];
+  # my $card      = $$card_ref;
+  # my $card_name = $card->getAttribute('Caption');
+  # my $fields_ref  = $_[1];
+  # my @fields      = @$fields_ref;
+  # my $names_ref   = $_[2];
+  # my $field_names = $$names_ref;
+  my $card_ref  = $_[0];
+  my $card      = $$card_ref;
+  my $card_name = $card->getAttribute('Caption');
+  # these two we want to update the originals by reference
+  # so access with @$fields and $$field_names, respectively
+  my $fields      = $_[1];
+  my $field_names = $_[2];
+  
+  # set up the entry
+  my $entry     = {
+    'name'      => $card_name,
+    'fields'    => {}
+  };
+  # the child property elements used to be called Property, now varying T* number types
+  foreach my $property ($card->getChildrenByTagName('*')) {
+    my $property_name = $property->getAttribute('Caption');
+    # Have we already seen this field for the header row listing?
+    my $field_key = lc($property_name);
+    if (!contains($field_key, @$fields)) { 
+      push(@$fields, $field_key);
+      $$field_names->{$field_key} = $property_name;
+    }
+    # Add the value of this field (property) to the entry's fields (if it has any PCDATA)
+    if (defined($property->textContent) && $property->textContent ne '') {
+      $entry->{'fields'}->{$field_key} = $property->textContent;
+    }
+  }
+  # this could be a web login (T22) record, look for those additional attributes on the node itself
+  my $url       = $card->getAttribute('URL');
+  my $username  = $card->getAttribute('Username');
+  my $password  = $card->getAttribute('Password');
+  if (defined($url) && $url ne '') {
+    # make sure there's a field name record in case we haven't already created one for URL
+    my $field_key = 'url';
+    if (!contains($field_key, @$fields)) {
+      push(@$fields, $field_key);
+      $$field_names->{$field_key} = 'URL';
+    }
+    $entry->{'fields'}->{'URL'} = $url;
+  }
+  if (defined($username) && $username ne '') {
+    # make sure there's a field name record in case we haven't already created one for Username
+    my $field_key = 'username';
+    if (!contains($field_key, @$fields)) {
+      push(@$fields, $field_key);
+      $$field_names->{$field_key} = 'Username';
+    }
+    $entry->{'fields'}->{'Username'} = $username;
+  }
+  if (defined($password) && $password ne '') {
+    # make sure there's a field name record in case we haven't already created one for Username
+    my $field_key = 'password';
+    if (!contains($field_key, @$fields)) {
+      push(@$fields, $field_key);
+      $$field_names->{$field_key} = 'Password';
+    }
+    $entry->{'fields'}->{'Password'} = $password;
+  }
+  return $entry;
 }
 
 sub onePasswordToStrip {
