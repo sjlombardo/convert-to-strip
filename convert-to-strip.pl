@@ -146,6 +146,15 @@ sub safeWalletToSTRIP {
       push(@entries, $entry);
     }
   }
+  # check for T22 records wrapped in a T21 category
+  foreach my $t21 ($root->getElementsByTagName('T21')) {
+    my $t21_caption = $t21->getAttribute('Caption');
+    foreach my $t22 ($t21->getChildrenByTagName('T22')) {
+      my $entry = safeWallet_entryForRecord(\$t22, \@fields, \$field_names);
+      $entry->{'category'} = $t21_caption;
+      push(@entries, $entry);
+    }
+  }
   close($slurp_handle);
   print_csv(\@entries, \@fields, \$field_names);
 }
@@ -186,19 +195,21 @@ sub safeWallet_entryForRecord {
     }
   }
   # this could be a web login (T22) record, look for those additional attributes on the node itself
-  my @attributes = ( 'URL', 'Username', 'Password' );
-  for my $attribute (@attributes) {
-    my $value = $card->getAttribute($attribute);
-    if (defined($value) && $value ne '') {
-      # make sure there's a field name record in case we haven't already created one for this key
-      my $field_key = lc($attribute);
-      if (!contains($field_key, @$fields)) {
-        push(@$fields, $field_key);
-        $$field_names->{$field_key} = $attribute;
+  if ($card->nodeName() eq 'T22') {
+    my @attributes = ( 'URL', 'Username', 'Password' );
+    for my $attribute (@attributes) {
+      my $value = $card->getAttribute($attribute);
+      if (defined($value) && $value ne '') {
+        # make sure there's a field name record in case we haven't already created one for this key
+        my $field_key = lc($attribute);
+        if (!contains($field_key, @$fields)) {
+          push(@$fields, $field_key);
+          $$field_names->{$field_key} = $attribute;
+        }
+        $entry->{'fields'}->{$field_key} = $value;
       }
-      $entry->{'fields'}->{$field_key} = $value;
     }
-  };
+  }
   return $entry;
 }
 

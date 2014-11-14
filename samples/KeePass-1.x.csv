@@ -1,0 +1,100 @@
+"Account","Login Name","Password","Web Site","Comments"
+"Sample Entry","User Name","Password","http://keepass.info/","Notes"
+"Sample Entry #2","Michael321","12345","http://keepass.info/help/kb/testform.html",""
+"Franks And Beans","frankmanowar","NVuHd3v4N6oksA6xDspe","http://zetetic.net","- (void)windowControllerDidLoadNib:(NSWindowController *) aController
+{
+    [super windowControllerDidLoadNib:aController];
+	// At this point the windowController has loaded the document's window. game time!
+
+	// set the database path
+	self.sqlCipherManager.databasePath = [self databaseFilePath];
+	
+	// set a delegate for the database manager
+	self.sqlCipherManager.delegate = self;
+	
+	// check to see if the db file is not on disk
+	DLog(@\"checking for default.strip existence...\");
+	if (![self.sqlCipherManager databaseExists]) {
+		DLog(@\"missing, checking for Strip Sync database file...\");
+		// previous doc path: ~/Library/Application Support/Strip/strip.db
+		NSString *prevPath = [AppDelegate pathForDocument:@\"strip.db\"];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:prevPath])
+		{
+			DLog(@\"found! launch migrate alert prompt\");
+			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+			[alert addButtonWithTitle:@\"Copy Database\"];
+			[alert addButtonWithTitle:@\"Skip\"];
+			[alert setMessageText:@\"Would you like to use your Strip Sync database file?\"];
+			[alert setInformativeText:@\"An encrypted database file for Strip Sync was found in your Home directory. Would you like to copy this file into STRIP?\"];
+			[alert setAlertStyle:NSCriticalAlertStyle];
+			if ([alert runModal] == NSAlertFirstButtonReturn)
+			{
+                // make a note that we'll have to do some work later...
+                setNewReplicaIDAfterLogin = YES;
+                
+				// copy data file in, show login sheet
+				//DLog(@\"copying database file into place...\");
+				NSFileManager *fm = [NSFileManager defaultManager];
+				NSError *error = nil;
+				if ([fm copyItemAtPath:prevPath toPath:sqlCipherManager.databasePath error:&error])
+				{
+					[self showSheetController:self.loginWindowController];
+				}
+				else {
+					DLog(@\"unable to copy file: %@\", error);
+					[NSApp presentError:error];
+				}
+			}
+			else {
+				// show setup sheet
+				DLog(@\"user declined to use Strip Sync database, showing setup sheet\");
+				[self showSheetController:self.setupWindowController];
+			}
+		}
+		else {
+			//DLog(@\"not found, launching setup window\");
+			[self showSheetController:self.setupWindowController];
+		}
+		//DLog(@\"missing, launching setup window\");
+		[self showSheetController:self.setupWindowController];
+	} else {
+		// go to login
+		//DLog(@\"confirmed, launching login window...\");
+		[self showSheetController:self.loginWindowController];
+	}
+	
+	// get our get info controller going
+	getInfoWindowController = [[GetInfoWindowController alloc] initWithWindowNibName:@\"GetInfo\"];
+	getInfoWindowController.sqlCipherManager = [self sqlCipherManager];
+    
+    // configure our sync controller
+    self.syncController.sqlCipherManager = [self sqlCipherManager];
+    
+    NSString *syncType = [[NSUserDefaults standardUserDefaults] objectForKey:ZSSyncTypePreferenceKey];
+    if ([syncType isEqualToString:ZSSyncTypeDrive]) {
+        [self _initializeDriveService];
+    } else if ([syncType isEqualToString:ZSSyncTypeDropbox]) {
+        [self _initializeDropboxService];
+    }
+    
+    // observe changes to settings in case sync type changes
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_settingsChanged:)
+                                                 name:NSUserDefaultsDidChangeNotification
+                                               object:nil];
+    
+    // observe changes to dropbox auth state
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_authHelperStateChangedNotification:)
+                                                 name:DBAuthHelperOSXStateChangedNotification
+                                               object:[DBAuthHelperOSX sharedHelper]];
+}"
+"General Knowledge","CorporalPunishment","NbYF7UlmVpbM9Bhbza1Q","http://sqlcipher.net",""
+"Windows","d0zer","dw8mnkdvYcBRoNWSlWeT","http://msdn.microsoft.com",""
+"WarHammer","Dolphin","l4LMlooU9XNgH8SL2oKu","http://warcrack.com","All,
+
+Probably like many of you out there, I've spent years writing similar code on top of FMDatabase for basic ORM functionality. Several months ago, I decided to do something about it. I'm happy to announce to everyone that I've just completed publishing the library to GitHub and made it available under a BSD 2-clause license. 
+
+Enjoy,
+
+Neal"
