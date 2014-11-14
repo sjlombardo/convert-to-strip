@@ -155,6 +155,15 @@ sub safeWalletToSTRIP {
       push(@entries, $entry);
     }
   }
+  # check for Identity category (T39) for records
+  foreach my $t39 ($root->getElementsByTagName('T39')) {
+    my $t39_caption = $t39->getAttribute('Caption');
+    foreach my $record ($t39->getChildrenByTagName('*')) {
+      my $entry = safeWallet_entryForRecord(\$record, \@fields, \$field_names);
+      $entry->{'category'} = $t39_caption;
+      push(@entries, $entry);
+    }
+  }
   close($slurp_handle);
   print_csv(\@entries, \@fields, \$field_names);
 }
