@@ -122,6 +122,10 @@ sub safeWalletToSTRIP {
   my $doc = XML::LibXML->load_xml(string => $xml, recover => 2) or die;
   my $isVersion3 = 0;
   my $root = $doc->documentElement();
+  if (!defined($root)) {
+    Tkx::tk___messageBox(-title => "Unable to read source file", -message => "SafeWallet XML export files are usually UTF-16LE, please check the file format at " . $opt_source . "\n", -type => "Dismiss");
+    return;
+  }
   my @nodes = $root->getElementsByTagName('T37');
   my $folder_tag_name = 'Folder';
   my $record_tag_name = 'Card';
