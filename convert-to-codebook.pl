@@ -27,7 +27,7 @@ use vars qw($opt_source $opt_target $file);
 my $IS_AQUA = Tkx::tk_windowingsystem() eq "aqua";
 
 my $mw = Tkx::widget->new(".");
-$mw->g_wm_title("Convert to STRIP");
+$mw->g_wm_title("Convert to Codebook");
 
 my $frame = $mw->new_frame();
 $frame->g_pack(-anchor=>'center', -padx => 20, -pady => 20);
@@ -71,13 +71,13 @@ sub getSource {
 }
 
 sub getTarget {
-  $opt_target = Tkx::tk___getSaveFile(-initialfile => 'strip.csv', -defaultextension => '.csv');
+  $opt_target = Tkx::tk___getSaveFile(-initialfile => 'codebook.csv', -defaultextension => '.csv');
 }
 
 sub validate {
   my $message = "";
   unless($opt_source) {
-    $message .= "Choose the directory to load STRIP databases from\n"; 
+    $message .= "Choose the directory to load Codebook databases from\n"; 
   }
   unless($opt_target) {
     $message .= "Choose the file to save entries to\n"; 

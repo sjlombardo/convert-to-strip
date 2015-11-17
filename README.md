@@ -1,6 +1,8 @@
-# Convert to STRIP
+# Convert to Codebook
 
-A simple conversion tool to help users migrate from SplashID and 1Password to [STRIP](http://getstrip.com/), a password manager from Zetetic. The Convert to STRIP utility is free to use and runs on Windows and OS X.
+A simple conversion tool to help users migrate from SplashID and 1Password to [Codebook](http://getstrip.com/), a password manager from Zetetic. The Convert to Codebook utility is free to use and runs on Windows and OS X.
+
+<small>Note: this utility was formely named "Convert to Codebook"</small>
 
 ## Getting Started
 
