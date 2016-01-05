@@ -305,8 +305,15 @@ sub onePasswordToStrip {
               $entry->{'fields'}->{$_->{'name'}} = $_->{'value'};
             }
           }
-        }
-        else {
+        } elsif ($name eq 'URLs') {
+          # add the name to our fields if necessary
+          if (!contains($_->{'name'}, @fields)) { push(@fields, $_->{'name'}); }
+          # concatenate the URLs together as one field (if there is a value)
+          if (defined($_->{'value'}) && $_->{'value'} ne '') {
+            # TODO: figure out what URLs contains, cat the values together, stick it in entry
+            # $entry->{'fields'}->{$_->{'name'}} = ...
+          }
+        } else {
           # ignore passwordHistory array
           if ($name ne 'passwordHistory') {
             $entry->{'fields'}->{$name} = $value;
