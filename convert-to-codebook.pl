@@ -289,7 +289,7 @@ sub onePasswordToStrip {
       my $name = $_;
       my $value = $row->{'secureContents'}->{$name};
       # add the field to our list if it's not in there already (but ignore the 'fields' name, holding an inner set of fields)
-      if(!contains($name, @fields) && $name ne 'fields' && $name ne 'passwordHistory') {
+      if(!contains($name, @fields) && $name ne 'fields' && $name ne 'passwordHistory' && $name ne 'URLs') {
          push(@fields, $name);
       }
       # add it to the entry if it's not blank
@@ -306,12 +306,14 @@ sub onePasswordToStrip {
             }
           }
         } elsif ($name eq 'URLs') {
-          # add the name to our fields if necessary
-          if (!contains($_->{'name'}, @fields)) { push(@fields, $_->{'name'}); }
-          # concatenate the URLs together as one field (if there is a value)
-          if (defined($_->{'value'}) && $_->{'value'} ne '') {
-            # TODO: figure out what URLs contains, cat the values together, stick it in entry
-            # $entry->{'fields'}->{$_->{'name'}} = ...
+
+          foreach(@$value) {
+            if (!contains("Website", @fields)) { push(@fields, "Website"); }
+            # add the name to our fields if necessary
+            # concatenate the URLs together as one field (if there is a value)
+            if (defined($_->{'url'}) && $_->{'url'} ne '') {
+            $entry->{'fields'}->{'Website'} .=  $_->{'url'} . "|";
+          }
           }
         } else {
           # ignore passwordHistory array
@@ -441,7 +443,11 @@ sub print_csv {
       if(defined && $_ ne '') {
         if(exists($entry->{"fields"}->{$_})) {
 					my $output = $entry->{"fields"}->{$_};
-					$output =~ s/\|/\\|/;
+          if($_ eq "Website" && length($output) > 0) {
+            $output = substr($output, 0, length($output) - 1); 
+          } else {
+            $output =~ s/\|/\\|/;
+          }
 					# escape any pipe characters with \ for STRIP CSV formatting
           push(@row,$output);
         } else {
