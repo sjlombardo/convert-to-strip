@@ -111,32 +111,19 @@ sub export {
 sub passwordSafe {
   my @entries = ();
   my @fields = ('username', 'password', 'email', 'url');
-  my $slurp_handle;
-  unless(open($slurp_handle, "<", $opt_source)) {
-    Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
-    return;
-  }
-  my $xml = <$slurp_handle>;
-  my $doc = XML::LibXML->load_xml(string => $xml, recover => 2, load_ext_dtd => 0, validation => 0);
-  my $root = $doc->documentElement();
-  # if (!defined($root)) {
-  #   Tkx::tk___messageBox(-title => "Unable to read source file", -message => "Please check the file format at " . $opt_source . "\n", -type => "ok");
-  #   return;
-  # }
-  foreach my $item ($doc->getElementsByTagName('entry')) {
-    my $entry = { 'fields' => {} };
-    my $group = $item->{group}->[0];
-    $entry->{'category'} = $group;
-    my $name = $item->{name}->[0];
-    $entry->{'name'} = $name;
-    foreach my $attribute (@fields) {
-      my $value = $item->{$attribute}->[0];
-      if (defined($value) && $value ne '') {
-        $entry->{'fields'}->{$attribute} = $value;
+  my $parser = XML::LibXML->new();
+  my $xmldoc = $parser->parse_file($opt_source);
+  foreach my $ent ($xmldoc->findnodes('/passwordsafe//entry')) {
+    my $entry = {'fields' => {}};
+    $entry->{'category'} = $ent->findnodes('./group')->to_literal;
+    $entry->{'name'} = $ent->findnodes('./title')->to_literal;
+    foreach my $fieldHeader (@fields) {
+      foreach my $field ($ent->findnodes('./' . $fieldHeader)) {
+        $entry->{'fields'}->{$fieldHeader} = $field->to_literal;
       }
     }
+    push (@entries, $entry);
   }
-  close($slurp_handle);
   print_csv(\@entries, \@fields);
 }
 
