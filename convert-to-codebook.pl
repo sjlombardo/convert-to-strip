@@ -61,6 +61,10 @@ my $radio_safewallet = $frame->new_ttk__radiobutton(-text => "SafeWallet XML", -
                                            -variable=> \$source_format);
 $radio_safewallet->g_grid(-row => 3, -column => 3, -sticky => 'nw', -padx => 10, -pady => 5);
 
+my $radio_passwordSafe = $frame->new_ttk__radiobutton(-text => "Password Safe XML", -value => "passwordSafe",
+                                           -variable=> \$source_format);
+$radio_passwordSafe->g_grid(-row => 3, -column => 4, -sticky => 'nw', -padx => 10, -pady => 5);
+
 my $export_button = $frame->new_ttk__button(-text => 'Run Conversion',  -command => \&export);
 $export_button->g_grid(-row => 4, -column => 1, -sticky => 'nw', -padx => 10, -pady => 5);
  
@@ -95,11 +99,45 @@ sub export {
       splashIdToStrip();
     } elsif ($source_format eq 'safewallet') {
       safeWalletToSTRIP();
-    } else {
+    } elsif ($source_format eq 'passwordSafe') {
+      passwordSafe();
+    } else { # '1password'
       onePasswordToStrip();
     }
     Tkx::tk___messageBox(-message => "Conversion complete!\n", -type => "ok");
   }
+}
+
+sub passwordSafe {
+  my @entries = ();
+  my @fields = ('username', 'password', 'email', 'url');
+  my $slurp_handle;
+  unless(open($slurp_handle, "<", $opt_source)) {
+    Tkx::tk___messageBox(-message => "Can't open source file " . $opt_source . "!\n", -type => "ok");
+    return;
+  }
+  my $xml = <$slurp_handle>;
+  my $doc = XML::LibXML->load_xml(string => $xml, recover => 2, load_ext_dtd => 0, validation => 0);
+  my $root = $doc->documentElement();
+  # if (!defined($root)) {
+  #   Tkx::tk___messageBox(-title => "Unable to read source file", -message => "Please check the file format at " . $opt_source . "\n", -type => "ok");
+  #   return;
+  # }
+  foreach my $item ($doc->getElementsByTagName('entry')) {
+    my $entry = { 'fields' => {} };
+    my $group = $item->{group}->[0];
+    $entry->{'category'} = $group;
+    my $name = $item->{name}->[0];
+    $entry->{'name'} = $name;
+    foreach my $attribute (@fields) {
+      my $value = $item->{$attribute}->[0];
+      if (defined($value) && $value ne '') {
+        $entry->{'fields'}->{$attribute} = $value;
+      }
+    }
+  }
+  close($slurp_handle);
+  print_csv(\@entries, \@fields);
 }
 
 sub safeWalletToSTRIP {
