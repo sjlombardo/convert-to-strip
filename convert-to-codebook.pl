@@ -161,7 +161,7 @@ sub safeWalletToSTRIP {
   my $isVersion3 = 0;
   my $root = $doc->documentElement();
   if (!defined($root)) {
-    Tkx::tk___messageBox(-title => "Unable to read source file", -message => "SafeWallet XML export files are usually UTF-16LE, please check the file format at " . $opt_source . "\n", -type => "Dismiss");
+    Tkx::tk___messageBox(-title => "Unable to read source file", -message => "SafeWallet XML export files are usually UTF-16LE, please check the file format at " . $opt_source . "\n", -type => "ok");
     return;
   }
   my @nodes = $root->getElementsByTagName('T37');
