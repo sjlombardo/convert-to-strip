@@ -1,0 +1,176 @@
+{
+  "ADDRESS": [
+    {
+      "addressFull": "118 Stony Brook ROad",
+      "addressName": "marys address",
+      "city": "Branchburg",
+      "country": "us",
+      "receiver": "",
+      "state": "New Jersey",
+      "zipcode": "08876"
+    }
+  ],
+  "AUTHENTIFIANT": [
+    {
+      "domain": "isagenix.com",
+      "email": "",
+      "login": "magsK123",
+      "note": "",
+      "password": "Freedom1",
+      "secondaryLogin": "",
+      "title": ""
+    },
+    {
+      "domain": "lego.com",
+      "email": "",
+      "login": "margy123",
+      "note": "",
+      "password": "robby123",
+      "secondaryLogin": "",
+      "title": ""
+    },
+    {
+      "domain": "doterra.com",
+      "email": "",
+      "login": "3984284",
+      "note": "",
+      "password": "Margysmiles1",
+      "secondaryLogin": "",
+      "title": ""
+    },
+    {
+      "domain": "yahoo.com",
+      "email": "margyk123@yahoo.com",
+      "login": "",
+      "note": "",
+      "password": "",
+      "secondaryLogin": "",
+      "title": ""
+    },
+    {
+      "domain": "lifeway.com",
+      "email": "margyk123@yahoo.com",
+      "login": "",
+      "note": "",
+      "password": "margy123",
+      "secondaryLogin": "",
+      "title": ""
+    },
+    {
+      "domain": "dropbox.com",
+      "email": "mkramer@zetetic.net",
+      "login": "",
+      "note": "",
+      "password": "",
+      "secondaryLogin": "",
+      "title": ""
+    },
+    {
+      "domain": "homedepot.com",
+      "email": "margyk123@yahoo.com",
+      "login": "",
+      "note": "",
+      "password": "robby123",
+      "secondaryLogin": "",
+      "title": ""
+    },
+    {
+      "domain": "google.com",
+      "email": "mkramer@zetetic.net",
+      "login": "",
+      "note": "",
+      "password": "",
+      "secondaryLogin": "",
+      "title": ""
+    },
+    {
+      "domain": "1password.com",
+      "email": "maryholiday456@gmail.com",
+      "login": "",
+      "note": "",
+      "password": "z1z2z3z4z5",
+      "secondaryLogin": "",
+      "title": "1password.com"
+    },
+    {
+      "domain": "live.com",
+      "email": "margyk123@yahoo.com",
+      "login": "",
+      "note": "",
+      "password": "",
+      "secondaryLogin": "",
+      "title": ""
+    },
+    {
+      "domain": "slack.com",
+      "email": "mkramer@zetetic.net",
+      "login": "",
+      "note": "",
+      "password": "",
+      "secondaryLogin": "",
+      "title": ""
+    }
+  ],
+  "BANKSTATEMENT": [
+    {
+      "BankAccountBIC": "2121routing number",
+      "BankAccountBank": "US-BOA",
+      "BankAccountIBAN": "PAYMENTSACCOUNTNUMBER",
+      "BankAccountName": "Bank account 1",
+      "BankAccountOwner": "Mary M Holiday",
+      "PersonalNote": ""
+    }
+  ],
+  "DRIVERLICENCE": [
+    {
+      "DateOfBirth": "",
+      "DeliveryDate": "2020-7-4",
+      "ExpireDate": "2027-1-1",
+      "Fullname": "",
+      "LinkedIdentity": "{EBFDFF7A-CDEA-4F20-BE74-314FD2823C2A}",
+      "Number": "K7166really long drivers license #",
+      "PersonalNote": "",
+      "Sex": "NO_TYPE",
+      "State": "US-0-NJ"
+    }
+  ],
+  "EMAIL": [
+    {
+      "email": "maryhoiday456@gmail.om"
+    }
+  ],
+  "IDENTITY": [
+    {
+      "dateOfBirth": "November 20, 1963",
+      "dateOfBirthArea": "",
+      "fullName": "Mary M Holiday",
+      "placeOfBirth": "born in Mineola",
+      "pseudo": "maryholiday456@gmail.com"
+    },
+    {
+      "dateOfBirth": "August 1, 1940",
+      "dateOfBirthArea": "",
+      "fullName": "Mickey Mouse",
+      "placeOfBirth": "",
+      "pseudo": "mickey@disney.com"
+    }
+  ],
+  "PHONE": [
+    {
+      "name 1": "Phone",
+      "name 2": "1",
+      "number": "9995551212",
+      "type": "Cell"
+    }
+  ],
+  "SOCIALSECURITYSTATEMENT": [
+    {
+      "DateOfBirth": "",
+      "LinkedIdentity": "{EBFDFF7A-CDEA-4F20-BE74-314FD2823C2A}",
+      "PersonalNote": "",
+      "Sex": "NO_TYPE",
+      "SocialSecurityFullname": "",
+      "SocialSecurityNumber": "111-48-1111"
+    }
+  ]
+}

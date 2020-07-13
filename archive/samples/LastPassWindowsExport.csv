@@ -1,0 +1,202 @@
+url,username,password,extra,name,grouping,fav
+http://password url,Password username,password password,Notes on the password,Password Item,LastPassFolder,0
+http://sn,,,This is a last pass secure note in Folder2,LP Secure Note,LP Folder 2,0
+http://sn,,,"NoteType:Address
+Language:en-US
+Title:mrs
+First Name:Mary
+Middle Name:M
+Last Name:Holiday
+Address 1:118 Stony Brook Road
+Address 2:Address 2
+Address 3:Address 3
+City / Town:Branchburg
+County:Somerset
+State:NJ
+Zip / Postal Code:08876
+Country:US
+Timezone:-05:00,1
+Company:Margs Company
+Gender:f
+Birthday:November,20,1963
+Email Address:maryholiday456@gmail.com
+Phone:{""num"":""19085551212"",""ext"":"""",""cc3l"":""USA""}
+Mobile Phone:
+Evening Phone:
+Fax:
+Username:
+Notes:
+",LP Address,LastPassFolder,0
+http://sn,,,"NoteType:Credit Card
+Language:en-US
+Name on Card:Mary Holiday
+Type:Mastercard
+Number:1111222233334444
+Security Code:123
+Start Date:January,2020
+Expiration Date:April,2025
+Notes:This is a note on a payment card
+",LP Payment Card,,0
+http://sn,,,"NoteType:Bank Account
+Language:en-US
+Bank Name:Affinity
+Account Type:Checking
+Routing Number:21 Routing Number
+Account Number:Bank Account Number
+SWIFT Code:lp swift code
+IBAN Number:iban #
+Pin:lp bank pin
+Branch Address:lp branch address
+Branch Phone:lp branch phone
+Notes:Lp bank account note
+MultiLineNote HEre
+And a third line
+",LP Bank Account,,0
+http://sn,,,"NoteType:Driver's License
+Language:en-US
+Number:K79NewJerseyDL Long number
+Expiration Date:January,1,2024
+License Class:class 5
+Name:Robert Kramer
+Address:100 Institute Road
+City / Town:Worcester
+State:MA
+ZIP / Postal Code:07945
+Country:US
+Date of Birth:March,29,2004
+Sex:m
+Height:6
+Notes:drives a tan car
+",Robbys License,LP Folder 2,0
+http://sn,,,"NoteType:Passport
+Language:en-US
+Type:US Passport
+Name:Andrew Kramer
+Country:US
+Number:8786789PassportNumber
+Sex:m
+Nationality:US
+Issuing Authority:US passport bureau
+Date of Birth:June,13,2004
+Issued Date:April,2,2016
+Expiration Date:January,1,2021
+Notes:
+",Andy,LP Folder 2,0
+http://sn,,,"NoteType:Health Insurance
+Language:en-US
+Company:Aetna
+Company Phone:800-aetnaphone
+Policy Type:Aetna type
+Policy Number:policy number
+Group ID:aetna group
+Member Name:Roy Kramer 
+Member ID:aetna member Id
+Physician Name:Dr Who
+Physician Phone:908-drnumber
+Physician Address:doctors address
+Co-pay:copay???
+Notes:This is the health insurance note
+",Aetna Health,LP Folder 2,0
+http://sn,,,"NoteType:Insurance
+Language:en-US
+Company:AIG
+Policy Type:term life
+Policy Number:insurance policy number
+Expiration:January,3,2030
+Agent Name:Policy Agent
+Agent Phone:Agent phone
+URL:aigwebsite
+Notes:Insurance policy notes
+",Margs Life Ins,LP Folder 2,0
+http://sn,,,"NoteType:Membership
+Language:en-US
+Organization:Planet Fitness
+Membership Number:PlanetFitMember number
+Member Name:Mary Holiday
+Start Date:January,1,2019
+Expiration Date:January,1,2021
+Website:planetfitness.com
+Telephone:pfphone
+Password:pfpassword
+Notes:Membership note
+",Gym membership,LP Folder 2,0
+http://sn,,,"NoteType:Wi-Fi Password
+Language:en-US
+SSID:wifi ssid
+Password:wifi passwaor
+Connection Type:wifi connection
+Connection Mode:wifi mode
+Authentication:wifi auth
+Encryption:wifi encrypt
+Use 802.1X:wifi use
+FIPS Mode:wifi fips more
+Key Type:wifi key type
+Protected:wifi protected
+Key Index:wifi key
+Notes:Wifi notes
+",Home Wifi,LastPassFolder,0
+http://sn,,,"NoteType:Email Account
+Language:en-US
+Username:maryholiday
+Password:email password
+Server:email server
+Port:email port
+Type:email type
+SMTP Server:email smtp server
+SMTP Port:email smtp port
+Notes:email notes
+",LP email,LastPassFolder,0
+http://sn,,,"NoteType:Instant Messenger
+Language:en-US
+Type:IM type 
+Username:im user
+Password:im password
+Server:im server
+Port:import
+Notes:Im notes
+",instant messenger,LastPassFolder,0
+http://sn,,,"NoteType:Database
+Language:en-US
+Type:database type
+Hostname:db host
+Port:db port
+Database:db db
+Username:db username
+Password:dbpassew
+SID:db sid
+Alias:db alias
+Notes:database notes
+",database,LastPassFolder,0
+http://sn,,,"NoteType:Server
+Language:en-US
+Hostname:server host
+Username:server username
+Password:server password
+Notes:Server notes
+",Server,LastPassFolder,0
+http://sn,,,"NoteType:SSH Key
+Language:en-US
+Bit Strength:ssh bit strength
+Format:ssh format
+Passphrase:ssh passphrase
+Private Key:ssh private key
+Public Key:ssh public key
+Hostname:ssh hostname
+Date:January,1,2020
+Notes:ssh notes
+",SSH Key,LastPassFolder,0
+http://sn,,,"NoteType:Software License
+Language:en-US
+License Key:software license key
+Licensee:software licenses
+Version:software version
+Publisher:software publisher
+Support Email:software support email
+Website:software website
+Price:software price
+Purchase Date:January,1,2020
+Order Number:software order number
+Number of Licenses:software number of licenses
+Order Total:software order total
+Notes:Software note
+",software license,LastPassFolder,0
