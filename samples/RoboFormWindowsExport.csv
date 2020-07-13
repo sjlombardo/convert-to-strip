@@ -1,9 +1,0 @@
-Name,Url,MatchUrl,Login,Pwd,Note,Folder,Rf_fields
-Roboform,https://online.roboform.com/login?lang=,https://online.roboform.com/login?lang=,maryholiday456@gmail.com,z1z2z3z4z5,,,User ID$:txt:maryholiday456@gmail.com,Password$:pwd:z1z2z3z4z5
-Shoprite,https://shoprite.com/,,,,,
-W3schools,https://www.w3schools.com/css/,,,,,
-Weather,https://weather.com/weather/today/l/08876:4:US,,,,,
-Weather - 1,https://weather.com/,,,,,
-new safenote,,,,,this is the text area for a safe note.  I am not sure what makes it safe.  Maybe it is the fact that it is in roboform and that is secrures with a password.  I have no idea if any of this data is encrypted anywhere.,
-Fridayparentportal,https://www.fridayparentportal.com/portal/security/login.cfm?msg=Session%20Timed%20Out,https://www.fridayparentportal.com/portal/security/login.cfm?msg=Session%20Timed%20Out,andysmom,margy123,,/Login,User ID$:txt:andysmom,Password$:pwd:margy123
-Isagenix,https://backoffice.isagenix.com/Authentication/Login?ReturnUrl=%2F%3F_ga%3D2.215114583.1545177759.1594094911-1968853763.1594094911&_ga=2.215114583.1545177759.1594094911-1968853763.1594094911,https://backoffice.isagenix.com/Authentication/Login?ReturnUrl=%2F%3F_ga%3D2.215114583.1545177759.1594094911-1968853763.1594094911&_ga=2.215114583.1545177759.1594094911-1968853763.1594094911,magsK123,Freedom1,,/New folder health,User ID$:txt:magsK123,Password$:pwd:Freedom1
