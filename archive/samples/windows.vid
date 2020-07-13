@@ -1,0 +1,26 @@
+SplashID vID File -v4.0
+F
+T,21,Web Logins,Description,Username,Password,URL,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,4,
+F,21,Amazon [Sample],johndoe,mom67rib,www.amazon.com,,,,,,"May 17,2010",,,8aca,4,Description,Username,Password,URL,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,Personal,Customer Service: 800-555-1212
+T,2,Bank Accts,Description,Account #,PIN,Name,Branch,Phone #,Field 7,Field 8,Field 9,Date Mod,4,
+F,2,Checking [Sample],92-5643-2410,8616,John Doe,Wells Fargo,310-555-1212,,,,"May 17,2010",,,1730,6,Description,Account #,PIN,Name,Branch,Phone #,Field 7,Field 8,Field 9,Date Mod,Personal,
+T,18,Email Accts,Description,Username,Password,POP3 Host,SMTP Host,Field 6,Field 7,Field 8,Field 9,Date Mod,4,
+F,18,Email [Sample],jdoe,bleb76ro,mail.home.com,mail.home.com,,,,,"May 17,2010",,,9512,4,Description,Username,Password,POP3 Host,SMTP Host,Field 6,Field 7,Field 8,Field 9,Date Mod,Personal,
+T,16,Frequent Flyer,Description,Number,Name,Date,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,0,
+F,16,United [Sample],9215786,John Doe,05/03,,,,,,"May 17,2010",,,6fd2,0,Description,Number,Name,Date,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,Business,
+T,3,Credit Cards,Description,Card #,Exp Date,Name,PIN,Bank,Field 7,Field 8,Field 9,Date Mod,18,
+F,3,Visa [Sample],1234-5555-6666-7777,03/06,John Doe,2897,MBNA,,,,"May 17,2010",,,bc64,18,Description,Card #,Exp Date,Name,PIN,Bank,Field 7,Field 8,Field 9,Date Mod,Personal,
+T,34,Insurance,Description,Policy #,Group #,Insured,Date,Phone #,Field 7,Field 8,Field 9,Date Mod,2,
+F,34,Blue Cross [Sample],6554317,12345,Fox Moulder,,,,,,"May 17,2010",,,9f1a,2,Description,Policy #,Group #,Insured,Date,Phone #,Field 7,Field 8,Field 9,Date Mod,Personal,
+T,24,Identification,Description,Number,Name,Date,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,2,
+F,24,Driver License [Sample],654541,John Doe,04/1961,,,,,,"May 17,2010",,,8694,2,Description,Number,Name,Date,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,Personal,
+T,35,Memberships,Description,Account #,Name,Date,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,0,
+F,35,AAA [Sample],12345,John Doe,01/01,,,,,,"March 20, 2012",,,e53e,0,Description,Account #,Name,Date,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,Business,
+T,22,Combinations,Description,Code,Field 3,Field 4,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,2,
+F,22,Locker Combo [Sample],1234,Gould's Gym,,,,,,,"May 17,2010",,,847d,2,Description,Code,Field 3,Field 4,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,Business,
+T,10,Serial Numbers,Description,Serial #,Purchase Date,Reseller,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,0,
+F,10,Adobe Photoshop [Sample],65456-54656-5645465,01/04,,,,,,,"May 17,2010",,,59a1,0,Description,Serial #,Date,Reseller,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,Business,
+T,31,Files,Description,Document Type,Creator,Date,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,0,
+F,31,End User License Agreement,Text,SplashData,5/17/10,,,,,,"May 17,2010",EULA.txt,Ni&~Sg[#q0^HrcC%5cul,c664,0,Description,Document Type,Creator,Date,Field 5,Field 6,Field 7,Field 8,Field 9,Date Mod,Business,
+T,2,Bank Accts,Description,Account #,PIN,Name,Branch,Phone #,Field 7,Field 8,Field 9,Date Mod,4,
+F,2,Commerce Bänk öf My Mönëy,123456,0987,Commerce Bank,Bridgewater,908-555-1212,Field 7,Field 7,Field 9,"February 08, 2013",,,24e,4,Description,Account #,PIN,Name,Branch,Phone #,Field 7,Field 8,Field 9,Date Mod,Personal,Test Note
